@@ -50,9 +50,8 @@ pub async fn handle_message(
         return Ok(());
     }
 
-    // we are. if the message has no embeds, delete it.
-    // TODO: decide between embeds or attachments or both
-    if message.embeds.is_empty() && message.attachments.is_empty() {
+    // we are. if the message has no attachments, delete it.
+    if message.attachments.is_empty() {
         message
             .delete(&ctx.http)
             .await
@@ -60,12 +59,11 @@ pub async fn handle_message(
     }
     // if it does, create a new thread under it.
     else {
-        // attempt to get the first attachment's filename, or the first embed's title, or finally the author's name.
+        // attempt to get the first attachment's filename, fall back on author's name otherwise.
         let thread_subject = message
             .attachments
             .first()
             .map(|a| a.filename.clone())
-            .or_else(|| message.embeds.first().and_then(|embed| embed.title.clone()))
             .unwrap_or(format!("{}'s submission", message.author.name));
 
         let thread = message
