@@ -4,8 +4,11 @@ use poise::serenity_prelude as serenity;
 
 const SEGMENT: &'static str = "autothread";
 
-#[poise::command(slash_command)]
-pub async fn autothread(ctx: CommandContext<'_>, channel: serenity::Channel) -> Result<()> {
+#[poise::command(slash_command, default_member_permissions = "ADMINISTRATOR")]
+pub async fn autothread(
+    ctx: CommandContext<'_>,
+    #[description = "The channel to toggle autothread on"] channel: serenity::Channel,
+) -> Result<()> {
     let channel_id_bytes = channel.id().0.to_le_bytes();
 
     ctx.data().kv_declare_segment(SEGMENT)?;
