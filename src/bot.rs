@@ -1,3 +1,5 @@
+use std::sync::Mutex;
+
 use color_eyre::{eyre::eyre, Result};
 use persy::Persy;
 use poise::serenity_prelude as serenity;
@@ -7,6 +9,7 @@ use crate::{autothread, config::Config};
 
 pub struct Bot {
     pub kv: Persy,
+    pub lua: Mutex<mlua::Lua>,
 }
 
 impl Bot {
